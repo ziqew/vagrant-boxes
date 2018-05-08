@@ -91,19 +91,45 @@ createDirs()
   indent; echo 'Creating servers directory'
 }
 
+
+
 downloadJdks()
 {
+  cd ~/bin
   echo "Downloading jdks"
-  for jdk in jdk-5u22-linux-x64.tar.gz jdk-6u45-linux-x64.tar.gz jdk-7u80-linux-x64.tar.gz jdk-8u65-linux-x64.tar.gz 
-  do 
+  
+  #jdk8
+  jdk="jdk-8u112-linux-x64.tar.gz"
+  if [ ! -e $jdk ] 
+  then
+    indent; echo "There is no $jdk"
+    indent; indent; wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/$jdk >/dev/null 2>&1
     if [ ! -e $jdk ] 
-    then 
-      indent; echo "There is no $jdk"
-      indent; indent; download "$jdk" "http://sof-tech.pl/jdk/$jdk"
-    else 
-      indent; echo "$jdk is available"
-    fi 
-  done
+    then
+        indent; indent; echo "Failed to download $jdk"
+    else
+        indent; indent; echo "Download successfully $jdk"
+    fi
+  else
+    indent; echo "$jdk is available"
+  fi
+  
+  
+  #jdk7
+  jdk="jdk-7u79-linux-x64.tar.gz"
+  if [ ! -e $jdk ] 
+  then
+    indent; echo "There is no $jdk"
+    indent; indent; wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u79-b15/$jdk >/dev/null 2>&1
+    if [ ! -e $jdk ] 
+    then
+        indent; indent; echo "Failed to download $jdk"
+    else
+        indent; indent; echo "Download successfully $jdk"
+    fi
+  else
+    indent; echo "$jdk is available"
+  fi
 }
 
 installJdks()
@@ -137,24 +163,24 @@ installEnvManagers()
   message=`jenv enable-plugin sbt`
   indent; indent; indent; echo $message
 
-  indent; echo 'Installing rbenv'
-  indent; indent; echo 'Clonning from github to ~/.rbenv'
-  git clone https://github.com/sstephenson/rbenv.git ~/.rbenv >/dev/null 2>&1
-  indent; indent; echo 'Installing plugins that provide rbenv install'
-  git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build >/dev/null 2>&1
+  #indent; echo 'Installing rbenv'
+  #indent; indent; echo 'Clonning from github to ~/.rbenv'
+  #git clone https://github.com/sstephenson/rbenv.git ~/.rbenv >/dev/null 2>&1
+  #indent; indent; echo 'Installing plugins that provide rbenv install'
+  #git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build >/dev/null 2>&1
 
-  indent; echo 'Installing nodenv'
-  indent; indent; echo 'Clonning from github to ~/.nodenv'
-  git clone https://github.com/OiNutter/nodenv.git ~/.nodenv >/dev/null 2>&1
-  indent; indent; echo 'Installing plugins that provide nodenv install'
-  git clone https://github.com/OiNutter/node-build.git ~/.nodenv/plugins/node-build >/dev/null 2>&1
-  indent; indent; echo "Setting environment variables"
-  export PATH="$HOME/.nodenv/bin:$PATH"
-  eval "$(nodenv init -)"
+  #indent; echo 'Installing nodenv'
+  #indent; indent; echo 'Clonning from github to ~/.nodenv'
+  #git clone https://github.com/OiNutter/nodenv.git ~/.nodenv >/dev/null 2>&1
+  #indent; indent; echo 'Installing plugins that provide nodenv install'
+  #git clone https://github.com/OiNutter/node-build.git ~/.nodenv/plugins/node-build >/dev/null 2>&1
+  #indent; indent; echo "Setting environment variables"
+  #export PATH="$HOME/.nodenv/bin:$PATH"
+  #eval "$(nodenv init -)"
 
-  indent; echo 'Installing pyenv'
-  indent; indent; echo 'Clonning from github to ~/.pyenv'
-  git clone https://github.com/yyuu/pyenv.git ~/.pyenv >/dev/null 2>&1
+  #indent; echo 'Installing pyenv'
+  #indent; indent; echo 'Clonning from github to ~/.pyenv'
+  #git clone https://github.com/yyuu/pyenv.git ~/.pyenv >/dev/null 2>&1
 }
 
 updateBashrc()
@@ -173,15 +199,15 @@ installRuntimes()
   indent; echo 'Set jdk 1.8 globally'
   jenv global 1.8
 
-  indent; echo 'Install ruby'
+  #indent; echo 'Install ruby'
   #time consuming operation
   #rbenv install 1.9.3-p0
 
-  indent; echo 'Install node.js'
-  nodenv install 4.2.1 >/dev/null 2>&1
-  nodenv global 4.2.1
+  #indent; echo 'Install node.js'
+  #nodenv install 4.2.1 >/dev/null 2>&1
+  #nodenv global 4.2.1
 
-  indent; echo 'install python'
+  #indent; echo 'install python'
   #time consuming operation
   #pyenv install 3.5.0
 
@@ -221,8 +247,8 @@ installingApp()
 installingMvn()
 {
   installingApp 'apache-maven' \
-    apache-maven-3.3.3-bin.tar.gz \
-    http://www.eu.apache.org/dist/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz \
+    apache-maven-3.3.9-bin.tar.gz \
+    https://archive.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz \
     'apache-maven*' \
     apache-maven
 }
@@ -230,8 +256,8 @@ installingMvn()
 installingAnt()
 {
   installingApp 'apache-ant' \
-    apache-ant-1.9.6-bin.tar.gz \
-    http://www.eu.apache.org/dist/ant/binaries/apache-ant-1.9.6-bin.tar.gz \
+    apache-ant-1.9.11-bin.tar.gz \
+    https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.11-bin.tar.gz \
     'apache-ant*' \
     apache-ant
 }
@@ -266,8 +292,8 @@ installingTools()
 installingTomcat()
 {
   installingApp 'apache-tomcat' \
-    apache-tomcat-8.0.28.tar.gz \
-    http://ftp.piotrkosoft.net/pub/mirrors/ftp.apache.org/tomcat/tomcat-8/v8.0.28/bin/apache-tomcat-8.0.28.tar.gz \
+    apache-tomcat-8.5.31.tar.gz \
+    https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.31/bin/apache-tomcat-8.5.31.tar.gz \
     'apache-tomcat*' \
     apache-tomcat
 
@@ -288,7 +314,35 @@ installingTomcat()
 installingServers()
 {
   cd $HOME_SERVERS_DIR
-  installingTomcat
+  #installingTomcat
+}
+
+installNodeJsYeoman()
+{
+    cd ~/bin
+    nodejs="node-v8.11.1-linux-x64.tar.xz"
+    nodejsdir="node-v8.11.1-linux-x64"
+    #download nodejs
+    if [ ! -e $nodejs ] 
+        then
+            indent; echo "There is no $nodejs"
+            indent; indent; download "$nodejs" "https://nodejs.org/dist/v8.11.1/$nodejs"
+        else
+            indent; echo "$nodejs is available"
+    fi
+    #install nodejs
+    indent; echo "Extracting $file"
+    tar xvzf $nodejs >/dev/null 2>&1
+    indent; echo 'Cleaning $nodejs'
+    rm $nodejs
+    
+    appendToBashrc 'export PATH="~/bin/node-v8.11.1-linux-x64/lib/node_modules/:~/bin/node-v8.11.1-linux-x64/bin/:$PATH"'
+    export PATH="~/bin/node-v8.11.1-linux-x64/lib/node_modules/:~/bin/node-v8.11.1-linux-x64/bin/:$PATH"
+    indent; echo $PATH
+    
+    #install yeoman
+    indent; echo 'Installing yeoman'
+    npm install -g yo
 }
 
 run() {
@@ -305,6 +359,8 @@ run() {
   updateBashrc
   installRuntimes
   installingServers
+  
+  #installNodeJsYeoman
 }
 
 
