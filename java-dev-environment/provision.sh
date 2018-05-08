@@ -95,32 +95,15 @@ createDirs()
 
 downloadJdks()
 {
-  cd ~/bin
+    cd ~/bin
   echo "Downloading jdks"
   
   #jdk8
-  jdk="jdk-8u112-linux-x64.tar.gz"
+  jdk="jdk-8u151-linux-x64.tar.gz"
   if [ ! -e $jdk ] 
   then
     indent; echo "There is no $jdk"
-    indent; indent; wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/$jdk >/dev/null 2>&1
-    if [ ! -e $jdk ] 
-    then
-        indent; indent; echo "Failed to download $jdk"
-    else
-        indent; indent; echo "Download successfully $jdk"
-    fi
-  else
-    indent; echo "$jdk is available"
-  fi
-  
-  
-  #jdk7
-  jdk="jdk-7u79-linux-x64.tar.gz"
-  if [ ! -e $jdk ] 
-  then
-    indent; echo "There is no $jdk"
-    indent; indent; wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u79-b15/$jdk >/dev/null 2>&1
+    indent; indent; wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/$jdk >/dev/null 2>&1
     if [ ! -e $jdk ] 
     then
         indent; indent; echo "Failed to download $jdk"
